@@ -2,14 +2,14 @@
   <div>
     <!-- List -->
     <div>
-      <div v-for="law, index of laws" :key="index">
+      <nuxt-link :to="`/law/${law._id}`" v-for="law, index of laws" :key="index">
         <h2>
           {{ law.title }}
         </h2>
         <p>
           {{ law.description }}
         </p>
-      </div>
+      </nuxt-link>
     </div>
   </div>
 </template>
@@ -31,9 +31,12 @@ export default {
     async getLaws() {
       const res = await fetch("https://api.lam-api.app-web.ml/law", {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("token")
+        },
       });
-
+      
       const data = await res.json();
       
       this.laws = data.laws;
