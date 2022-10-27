@@ -43,6 +43,20 @@
                   ></v-row
                 >
               </v-card-actions>
+              <!-- Error -->
+                <v-card-actions class="px-7 pb-7">
+                  <v-row
+                    class="d-flex flex-row align-center justify-center full-width"
+                  >
+                    <v-alert
+                      v-if="error"
+                      type="error"
+                      class="text-center"
+                      elevation="2"
+                      >{{ error }}</v-alert
+                    >
+                  </v-row>
+                </v-card-actions>
               <div class="px-5 pb-5">
                 <p class="body-1 text-center text--secondary pa-2 mb-1">
                   Vous n'avez pas de compte ?
@@ -85,11 +99,11 @@
 <script>
 export default {
   name: "login",
-  auth: "guest",
   data() {
     return {
       email: "",
       password: "",
+      error: "",
       rules: [(v) => !!v || "Champ requis."],
       rules_password: [
         (v) => !!v || "Champ requis.",
@@ -100,26 +114,26 @@ export default {
     };
   },
   methods: {
-    submit() {
-      /**this.$axios
-        .$post("/auth/login", {
-          email: this.email,
-          password: this.password,
-        })*/
+    async submit() {
       if (this.$refs.form.validate()) {
-        this.$auth
-          .loginWith("local", {
-            data: {
-              email: this.email,
-              password: this.password,
-            },
-          })
-          .then((res) => {
-            // console.log(res);
-            // this.$auth.setUser(res.data);
-            // console.log(this.$auth.user);
-            this.$router.push("/");
-          });
+        const res = await fetch("https://api.lam-api.app-web.ml/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.status === 200) {
+          localStorage.setItem("token", data.token);
+
+          this.$router.push("/");
+        } else {
+          this.error = data.message;
+        }
       }
     },
   },

@@ -18,16 +18,23 @@
                 <v-card-text>
                   <!-- column genre -->
                       <v-text-field
-                        v-model="email"
-                        label="Email"
-                        type="email"
+                        v-model="firstName"
+                        label="First Name"
                         :rules="rules"
                         outlined
                       ></v-text-field>
 
                       <v-text-field
-                        v-model="name"
-                        label="Pseudo"
+                        v-model="lastName"
+                        label="Last Name"
+                        :rules="rules"
+                        outlined
+                      ></v-text-field>
+
+                      <v-text-field
+                        v-model="email"
+                        label="Email"
+                        type="email"
                         :rules="rules"
                         outlined
                       ></v-text-field>
@@ -44,8 +51,22 @@
                     class="d-flex flex-row align-center justify-center full-width"
                   >
                     <v-btn type="submit" block color="primary" depressed large>
-                      <span class="v-btn-content">S'inscrire'</span>
+                      <span class="v-btn-content">S'inscrire</span>
                     </v-btn>
+                  </v-row>
+                </v-card-actions>
+                <!-- Error -->
+                <v-card-actions class="px-7 pb-7">
+                  <v-row
+                    class="d-flex flex-row align-center justify-center full-width"
+                  >
+                    <v-alert
+                      v-if="error"
+                      type="error"
+                      class="text-center"
+                      elevation="2"
+                      >{{ error }}</v-alert
+                    >
                   </v-row>
                 </v-card-actions>
                 <div class="px-5 pb-5">
@@ -83,7 +104,6 @@
           ></v-img>
         </v-container>
       </v-col>
-      </v-col>
     </v-row>
   </v-app>
 </template>
@@ -91,12 +111,13 @@
 <script>
 export default {
   name: "register",
-  auth: "guest",
   data() {
     return {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
+      error: "",
       rules: [(v) => !!v || "Champ requis."],
       rules_password: [
         (v) => !!v || "Champ requis.",
@@ -109,16 +130,25 @@ export default {
   methods: {
     async submit() {
       if (this.$refs.form.validate()) {
-        await fetch("http://localhost:3000/auth/register", {
+        const res = await fetch("https://api.lam-api.app-web.ml/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: this.name,
+            firstName: this.firstName,
+            lastName: this.lastName,
             email: this.email,
             password: this.password,
           }),
         });
-        await this.$router.push("login");
+
+        const data = await res.json();
+        this.password = "";
+
+        if(res.status === 201) {
+          this.$router.push('/auth/login')
+        } else {
+          this.error = data.message;
+        }
       }
     },
   },
