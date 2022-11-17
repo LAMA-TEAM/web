@@ -31,6 +31,7 @@
                   v-model="password"
                   label="Mot de passe"
                   outlined
+                  type="password"
                   :rules="rules_password"
                 ></v-text-field>
               </v-card-text>

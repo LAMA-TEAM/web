@@ -43,6 +43,7 @@
                         v-model="password"
                         label="Mot de passe"
                         :rules="rules_password"
+                        type="password"
                         outlined
                       ></v-text-field>
                 </v-card-text>

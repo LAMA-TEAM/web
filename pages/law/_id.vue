@@ -1,23 +1,35 @@
 <template>
-    <div>
-        <h1>
+    <div class="container">
+        <h1 class="title-section">
             {{ law.title }}
         </h1>
         <p>
+            <i>{{ new Date(law.createdAt).toLocaleDateString() }}</i>
+        </p>
+        <p>
             {{ law.description }}
         </p>
-        <!-- Vote Yes/No -->
-        <div v-if="!law.voted">
-            <v-btn
-                color="success"
-                @click="vote(law._id, 1)"
-                :disabled="law.voted"
-            >Oui</v-btn>
-            <v-btn
-                color="error"
-                @click="vote(law._id, 0)"
-                :disabled="law.voted"
-            >Non</v-btn>
+        
+        <div class="vote-footer">
+            <div>
+                <!-- Vote Yes/No -->
+                <h3 class="mb-3">Voter pour la loi</h3>
+                <div v-if="!law.voted">
+                    <v-btn
+                        color="success"
+                        @click="vote(law._id, 1)"
+                        :disabled="law.voted"
+                    >Oui</v-btn>
+                    <v-btn
+                        color="error"
+                        @click="vote(law._id, 0)"
+                        :disabled="law.voted"
+                    >Non</v-btn>
+                </div>
+            </div>
+            <div>
+                Nombres de votes : ...
+            </div>
         </div>
     </div>
 </template>
@@ -72,3 +84,12 @@ export default {
     }
 }
 </script>
+
+<style>
+.vote-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+</style>

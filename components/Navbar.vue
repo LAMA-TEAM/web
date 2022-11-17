@@ -2,23 +2,33 @@
   <v-app-bar
     app
     class="mainToolbar"
-    elevation="0"
+    elevation="2"
     color="primary"
     height="60"
     dense
+    dark
   >
-    <nuxt-link to="/">
-      <v-toolbar-title color="white" >LAMA-PI</v-toolbar-title>
-    </nuxt-link>
+    <v-toolbar-title>LAMA-PI</v-toolbar-title>
+
+    <v-spacer></v-spacer>
+
+      <v-btn
+        plain
+        v-for="item in items"
+        :key="item.title"
+        :href="item.href"
+        class="mr-4"
+        >
+        {{ item.title }}
+      </v-btn>
 
     <v-spacer></v-spacer>
 
     <div>
+      <v-btn color="danger" depressed to="/admin" class="mx-3" nuxt>Admin</v-btn>
+
       <v-btn color="white" outlined depressed to="/auth/login" nuxt
-        >Se connecter</v-btn
-      >
-      <v-btn color="white" text depressed to="/auth/register" nuxt
-        >S'inscrire</v-btn
+        >Se déconnecter</v-btn
       >
     </div>
     <v-dialog v-model="openEditEmail">
@@ -39,6 +49,7 @@
 export default {
   data() {
     return {
+      items: [{title: "Accueil", href: "/"}],
       openEditEmail: false,
       openEditPassword: false,
     };
