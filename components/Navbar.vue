@@ -25,8 +25,7 @@
     <v-spacer></v-spacer>
 
     <div>
-      <v-btn color="danger" depressed to="/admin" class="mx-3" nuxt>Admin</v-btn>
-
+      <v-btn color="danger" depressed to="/profile" class="mx-3" nuxt>Profile</v-btn>
       <v-btn color="white" outlined depressed to="/auth/login" nuxt
         >Se déconnecter</v-btn
       >

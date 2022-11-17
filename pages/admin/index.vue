@@ -71,6 +71,7 @@
 
 <script>
 import isAuthenticated from '~/utils/isAuthenticated'
+import isAdmin from '~/utils/isAdmin'
 
 export default {
     data() {
@@ -80,6 +81,7 @@ export default {
     },
     async mounted() {
         await isAuthenticated(this.$router);
+        await isAdmin(this.$router);
         await this.getLaws();
     },
     methods: {
